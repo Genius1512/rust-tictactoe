@@ -17,13 +17,14 @@ impl HumanPlayer {
 }
 
 impl Player for HumanPlayer {
-    fn get_move(&self, _board: &Vec<Vec<Option<usize>>>) -> (usize, usize) {
+    fn get_move(&self, board: &Vec<Vec<Option<usize>>>) -> (usize, usize) {
         let mut i: usize;
         let mut j: usize;
 
         loop {
             print!("Enter your move: ");
             let input: String = read!();
+            let input = input.to_lowercase();
 
             if input.matches('_').count() != 1 {
                 println!("{}", input.matches('_').count());
@@ -48,7 +49,7 @@ impl Player for HumanPlayer {
                     println!("Could not convert char to digit");
                     continue;
                 }
-            };
+            } - 1;
 
             j = match right.parse::<usize>() {
                 Ok(j) => j,
@@ -56,17 +57,26 @@ impl Player for HumanPlayer {
                     println!("Could not parse number");
                     continue;
                 }
-            };
+            } - 1;
 
             if i > 26 || j > 26 {
                 println!("A number is too big; Cannot be more than 26");
                 continue;
             };
 
+            match board[i][j] {
+                Some(_) => {
+                    println!("Field is already taken");
+                    continue;
+                }
+
+                None => {}
+            };
+
             break;
         }
 
-        return (i - 1, j - 1);
+        return (i, j);
     }
 
     fn icon(&self) -> char {

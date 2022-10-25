@@ -15,7 +15,7 @@ pub struct Game {
 
 impl Game {
     pub fn new(size: usize, players: Vec<Box<dyn Player>>, required_icons_in_a_row: usize) -> Game {
-        if size > 27 {
+        if size > 26 {
             panic!("Board is too big")
         }
 
