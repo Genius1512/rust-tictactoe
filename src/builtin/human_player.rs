@@ -1,6 +1,6 @@
 use text_io::read;
 
-use crate::{utils, Player};
+use crate::{utils, Game, Player};
 
 pub struct HumanPlayer {
     icon: char,
@@ -17,9 +17,12 @@ impl HumanPlayer {
 }
 
 impl Player for HumanPlayer {
-    fn get_move(&self, board: &Vec<Vec<Option<usize>>>) -> (usize, usize) {
+    fn get_move(&self, game: &Game) -> (usize, usize) {
         let mut i: usize;
         let mut j: usize;
+
+        println!("{}", game);
+        println!("It's {}'s turn!", self.name());
 
         loop {
             print!("Enter your move: ");
@@ -64,7 +67,7 @@ impl Player for HumanPlayer {
                 continue;
             };
 
-            match board[i][j] {
+            match game.board[i][j] {
                 Some(_) => {
                     println!("Field is already taken");
                     continue;

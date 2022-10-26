@@ -4,7 +4,7 @@ use std::fmt;
 use crate::{tictactoe_error::TicTacToeError, utils, Player};
 
 pub struct Game {
-    board: Vec<Vec<Option<usize>>>,
+    pub board: Vec<Vec<Option<usize>>>,
     board_size: usize,
 
     #[allow(dead_code)]
@@ -47,7 +47,7 @@ impl Game {
 
     pub fn make_move(&mut self, player_index: usize) -> Result<(), Box<dyn Error>> {
         let (i, j) = match self.players.get(player_index) {
-            Some(p) => p.get_move(&self.board),
+            Some(p) => p.get_move(&self),
             None => return Err(Box::new(TicTacToeError::new("Player index out of range"))),
         };
 
