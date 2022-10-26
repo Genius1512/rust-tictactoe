@@ -98,3 +98,18 @@ impl fmt::Display for Game {
         write!(f, "{}", out)
     }
 }
+
+/// Builtin variations
+impl Game {
+    pub fn default(player_one: Box<dyn Player>, player_two: Box<dyn Player>) -> Game {
+        return Game::new(3, vec![player_one, player_two], 3);
+    }
+
+    pub fn default_three_players(
+        player_one: Box<dyn Player>,
+        player_two: Box<dyn Player>,
+        player_three: Box<dyn Player>,
+    ) -> Game {
+        return Game::new(4, vec![player_one, player_two, player_three], 3);
+    }
+}
