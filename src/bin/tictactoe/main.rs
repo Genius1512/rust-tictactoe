@@ -2,7 +2,7 @@ use tictactoe::{builtin::HumanPlayer, Game};
 
 fn main() {
     let mut game = Game::new(
-        27,
+        5,
         vec![
             Box::new(HumanPlayer::new('x', "Player One")),
             Box::new(HumanPlayer::new('o', "Player Two")),

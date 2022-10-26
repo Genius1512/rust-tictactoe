@@ -5,8 +5,7 @@ version = 3
 [[package]]
 name = "text_io"
 version = "0.1.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5f0c8eb2ad70c12a6a69508f499b3051c924f4b1cfeae85bfad96e6bc5bba46"
+source = "git+https://github.com/Genius1512/rust_text_io.git#cb94dd60ed85a4ed2e1d50fb7c22bfb9d1292f6c"
 
 [[package]]
 name = "tictactoe"

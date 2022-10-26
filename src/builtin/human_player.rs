@@ -26,13 +26,13 @@ impl Player for HumanPlayer {
             let input: String = read!();
             let input = input.to_lowercase();
 
-            if input.matches('_').count() != 1 {
-                println!("{}", input.matches('_').count());
+            if input.matches(' ').count() != 1 {
+                println!("{}", input.matches(' ').count());
                 println!("None or too many spaces in input");
                 continue;
             };
 
-            let split: Vec<&str> = input.split('_').collect();
+            let split: Vec<&str> = input.split(' ').collect();
             let (left, right) = (split[0], split[1]);
 
             let left: char = match left.chars().next() {
