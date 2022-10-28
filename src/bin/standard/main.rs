@@ -1,14 +1,22 @@
 use tictactoe::{builtin::HumanPlayer, Game};
 
+mod config;
+use config::parse_config;
+
 fn main() {
+    let config = match parse_config("default.json") {
+        Ok(config) => config,
+        Err(e) => panic!("{}", e),
+    };
+
     let mut game = Game::new(
-        16,
+        config.board_size,
         vec![
             Box::new(HumanPlayer::new('x', "Player One")),
             Box::new(HumanPlayer::new('o', "Player Two")),
             Box::new(HumanPlayer::new('!', "Player Three")),
         ],
-        5,
+        config.required_icons_in_a_row,
     );
 
     'mainloop: loop {

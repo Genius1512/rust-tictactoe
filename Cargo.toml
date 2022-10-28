@@ -6,4 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+json = "0.12.4"
+serde = "1.0.147"
+serde_derive = "1.0.147"
+serde_json = "1.0.87"
 text_io = { git = "https://github.com/Genius1512/rust_text_io.git" }
