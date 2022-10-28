@@ -107,6 +107,7 @@ impl Game {
                     }
 
                     if j < offset {
+                        is_diagonal_left = false;
                         continue;
                     }
 

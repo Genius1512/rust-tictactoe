@@ -21,16 +21,12 @@ impl Player for HumanPlayer {
         let mut i: usize;
         let mut j: usize;
 
-        println!("{}", game);
-        println!("It's {}'s turn!", self.name());
-
         loop {
             print!("Enter your move: ");
             let input: String = read!();
             let input = input.to_lowercase();
 
             if input.matches(' ').count() != 1 {
-                println!("{}", input.matches(' ').count());
                 println!("None or too many spaces in input");
                 continue;
             };

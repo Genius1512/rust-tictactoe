@@ -12,6 +12,13 @@ fn check_for_winner_diagonal_left_test() {
         3,
     );
 
+    game.make_moves(vec![(0, 0, 0)]).unwrap();
+
+    match game.check_for_winner() {
+        Some(_) => panic!("Should not have won"),
+        None => {}
+    }
+
     game.make_moves(vec![(0, 4, 0), (1, 3, 0), (2, 2, 0)])
         .unwrap();
 
