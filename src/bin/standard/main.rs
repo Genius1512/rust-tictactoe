@@ -4,25 +4,21 @@ mod config;
 use config::parse_config;
 
 fn main() {
-    let config = match parse_config("default.json") {
+    let config = match parse_config() {
         Ok(config) => config,
-        Err(e) => panic!("{}", e),
+        Err(e) => panic!("Error: {}", e),
     };
 
     let mut game = Game::new(
         config.board_size,
-        vec![
-            Box::new(HumanPlayer::new('x', "Player One")),
-            Box::new(HumanPlayer::new('o', "Player Two")),
-            Box::new(HumanPlayer::new('!', "Player Three")),
-        ],
+        config.players,
         config.required_icons_in_a_row,
     );
 
     'mainloop: loop {
         for player_index in 0..game.players.len() {
             println!("{}", game);
-            println!("It's {}'s move!", game.players[player_index].name());
+            println!("It's {}'s move!", game.players[player_index].icon());
 
             match game.make_move(player_index) {
                 Ok(_) => {}
@@ -31,7 +27,7 @@ fn main() {
 
             match game.check_for_winner() {
                 Some(winner) => {
-                    println!("{} won! Congratulations!", game.players[winner].name());
+                    println!("{} won! Congratulations!", game.players[winner].icon());
                     break 'mainloop;
                 }
                 None => {}
