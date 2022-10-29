@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use clap::{value_parser, Arg, ArgAction, Command};
-use tictactoe::{builtin::HumanPlayer, Player};
+use tictactoe::{builtin::HumanPlayer, Player, TicTacToeError};
 
 pub fn parse_config() -> Result<Config, Box<dyn Error>> {
     let matches = Command::new("TicTacToe")
@@ -36,18 +36,25 @@ pub fn parse_config() -> Result<Config, Box<dyn Error>> {
 
     let mut players: Vec<Box<dyn Player>> = vec![];
 
-    for player in matches.get_many::<char>("player").unwrap() {
+    for player in match matches.get_many::<char>("player") {
+        Some(player) => player,
+        None => return Err(Box::new(TicTacToeError::new("Error while parsing players"))),
+    } {
         players.push(Box::new(HumanPlayer::new(*player)))
     }
 
     Ok(Config {
         board_size: match matches.get_one("size") {
             Some(size) => *size,
-            None => todo!(),
+            None => return Err(Box::new(TicTacToeError::new("Error while parsing size"))),
         },
         required_icons_in_a_row: match matches.get_one("win_condition") {
             Some(i) => *i,
-            None => todo!(),
+            None => {
+                return Err(Box::new(TicTacToeError::new(
+                    "Error while parsing win_condition",
+                )))
+            }
         },
         players,
     })
