@@ -1,4 +1,4 @@
-use tictactoe::{builtin::HumanPlayer, Game};
+use tictactoe::Game;
 
 mod config;
 use config::parse_config;
