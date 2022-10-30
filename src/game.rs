@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::fmt;
 
-use crate::{tictactoe_error::TicTacToeError, utils, Player};
+use crate::{tictactoe_error::TicTacToeError, utils, GameState, Player};
 
 pub struct Game {
     pub board: Vec<Vec<Option<usize>>>,
@@ -44,7 +44,7 @@ impl Game {
         }
     }
 
-    pub fn check_for_winner(&self) -> Option<usize> {
+    pub fn check_for_winner(&self) -> GameState {
         for i in 0..self.board_size {
             for j in 0..self.board_size {
                 // If no one is placed there ...
@@ -52,7 +52,7 @@ impl Game {
                     continue; // ...skip to next field
                 }
 
-                // board[i][j] is used bya player
+                // board[i][j] is used by a player
 
                 let mut is_horizontal = true;
                 let mut is_diagonal_right = true;
@@ -128,12 +128,26 @@ impl Game {
                 }
 
                 if is_vertical || is_horizontal || is_diagonal_right || is_diagonal_left {
-                    return self.board[i][j];
+                    return GameState::Winner(self.board[i][j].unwrap());
                 }
             }
         }
 
-        None
+        let mut is_a_tie = true;
+        'outer: for j in 0..self.board_size {
+            for i in 0..self.board_size {
+                if self.board[i][j] == None {
+                    is_a_tie = false;
+                    break 'outer;
+                }
+            }
+        }
+
+        return if is_a_tie {
+            GameState::Tie
+        } else {
+            GameState::None
+        };
     }
 
     pub fn make_move(&mut self, player_index: usize) -> Result<(), Box<dyn Error>> {

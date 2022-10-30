@@ -1,4 +1,4 @@
-use tictactoe::Game;
+use tictactoe::{Game, GameState};
 
 mod config;
 use config::parse_config;
@@ -26,11 +26,15 @@ fn main() {
             }
 
             match game.check_for_winner() {
-                Some(winner) => {
+                GameState::Winner(winner) => {
                     println!("{} won! Congratulations!", game.players[winner].icon());
                     break 'mainloop;
                 }
-                None => {}
+                GameState::Tie => {
+                    println!("It's a tie!");
+                    break 'mainloop;
+                }
+                GameState::None => {}
             }
         }
     }
