@@ -4,15 +4,11 @@ use crate::{utils, Game, Player};
 
 pub struct HumanPlayer {
     icon: char,
-    name: String,
 }
 
 impl HumanPlayer {
-    pub fn new(icon: char, name: &str) -> HumanPlayer {
-        HumanPlayer {
-            icon,
-            name: name.to_string(),
-        }
+    pub fn new(icon: char) -> HumanPlayer {
+        HumanPlayer { icon }
     }
 }
 
@@ -80,9 +76,5 @@ impl Player for HumanPlayer {
 
     fn icon(&self) -> char {
         self.icon
-    }
-
-    fn name(&self) -> String {
-        self.name.clone()
     }
 }

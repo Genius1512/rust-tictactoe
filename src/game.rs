@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::fmt;
 
-use crate::{tictactoe_error::TicTacToeError, utils, Player};
+use crate::{tictactoe_error::TicTacToeError, utils, GameState, Player};
 
 pub struct Game {
     pub board: Vec<Vec<Option<usize>>>,
@@ -13,17 +13,27 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(size: usize, players: Vec<Box<dyn Player>>, required_icons_in_a_row: usize) -> Game {
+    pub fn new(
+        size: usize,
+        players: Vec<Box<dyn Player>>,
+        required_icons_in_a_row: usize,
+    ) -> Result<Game, Box<dyn Error>> {
         if size > 26 {
-            panic!("Board is too big")
+            return Err(Box::new(TicTacToeError::new(
+                "Board is too big, maximum is 26",
+            )));
         }
 
         if required_icons_in_a_row > size {
-            panic!("This configuration is not possible, as there is no constellation where someone wins");
+            return Err(Box::new(TicTacToeError::new(
+                "This configuration is not allowed, as the required icons in a row must be below or equal to the board's size"
+            )));
         }
 
         if players.len() < 2 {
-            panic!("Not enought players. At least two are required");
+            return Err(Box::new(TicTacToeError::new(
+                "Not enough players, at least two are required",
+            )));
         }
 
         let mut board: Vec<Vec<Option<usize>>> = vec![];
@@ -34,17 +44,17 @@ impl Game {
             }
         }
 
-        Game {
+        Ok(Game {
             board,
             board_size: size,
 
             required_icons_in_a_row,
 
             players,
-        }
+        })
     }
 
-    pub fn check_for_winner(&self) -> Option<usize> {
+    pub fn check_for_winner(&self) -> GameState {
         for i in 0..self.board_size {
             for j in 0..self.board_size {
                 // If no one is placed there ...
@@ -52,7 +62,7 @@ impl Game {
                     continue; // ...skip to next field
                 }
 
-                // board[i][j] is used bya player
+                // board[i][j] is used by a player
 
                 let mut is_horizontal = true;
                 let mut is_diagonal_right = true;
@@ -128,12 +138,26 @@ impl Game {
                 }
 
                 if is_vertical || is_horizontal || is_diagonal_right || is_diagonal_left {
-                    return self.board[i][j];
+                    return GameState::Winner(self.board[i][j].unwrap());
                 }
             }
         }
 
-        None
+        let mut is_a_tie = true;
+        'outer: for j in 0..self.board_size {
+            for i in 0..self.board_size {
+                if self.board[i][j] == None {
+                    is_a_tie = false;
+                    break 'outer;
+                }
+            }
+        }
+
+        return if is_a_tie {
+            GameState::Tie
+        } else {
+            GameState::None
+        };
     }
 
     pub fn make_move(&mut self, player_index: usize) -> Result<(), Box<dyn Error>> {
@@ -195,20 +219,5 @@ impl fmt::Display for Game {
         }
 
         write!(f, "{}", out)
-    }
-}
-
-/// Builtin variations
-impl Game {
-    pub fn default(player_one: Box<dyn Player>, player_two: Box<dyn Player>) -> Game {
-        return Game::new(3, vec![player_one, player_two], 3);
-    }
-
-    pub fn default_three_players(
-        player_one: Box<dyn Player>,
-        player_two: Box<dyn Player>,
-        player_three: Box<dyn Player>,
-    ) -> Game {
-        return Game::new(4, vec![player_one, player_two, player_three], 3);
     }
 }
