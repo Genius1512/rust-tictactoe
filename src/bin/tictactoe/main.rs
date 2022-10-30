@@ -9,11 +9,17 @@ fn main() {
         Err(e) => panic!("Error: {}", e),
     };
 
-    let mut game = Game::new(
+    let mut game: Game = match Game::new(
         config.board_size,
         config.players,
         config.required_icons_in_a_row,
-    );
+    ) {
+        Ok(game) => game,
+        Err(e) => {
+            println!("{}", e);
+            return;
+        }
+    };
 
     'mainloop: loop {
         for player_index in 0..game.players.len() {

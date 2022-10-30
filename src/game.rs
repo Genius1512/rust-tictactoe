@@ -13,17 +13,27 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(size: usize, players: Vec<Box<dyn Player>>, required_icons_in_a_row: usize) -> Game {
+    pub fn new(
+        size: usize,
+        players: Vec<Box<dyn Player>>,
+        required_icons_in_a_row: usize,
+    ) -> Result<Game, Box<dyn Error>> {
         if size > 26 {
-            panic!("Board is too big")
+            return Err(Box::new(TicTacToeError::new(
+                "Board is too big, maximum is 26",
+            )));
         }
 
         if required_icons_in_a_row > size {
-            panic!("This configuration is not possible, as there is no constellation where someone wins");
+            return Err(Box::new(TicTacToeError::new(
+                "This configuration is not allowed, as the required icons in a row must be below or equal to the board's size"
+            )));
         }
 
         if players.len() < 2 {
-            panic!("Not enought players. At least two are required");
+            return Err(Box::new(TicTacToeError::new(
+                "Not enough players, at least two are required",
+            )));
         }
 
         let mut board: Vec<Vec<Option<usize>>> = vec![];
@@ -34,14 +44,14 @@ impl Game {
             }
         }
 
-        Game {
+        Ok(Game {
             board,
             board_size: size,
 
             required_icons_in_a_row,
 
             players,
-        }
+        })
     }
 
     pub fn check_for_winner(&self) -> GameState {
@@ -209,20 +219,5 @@ impl fmt::Display for Game {
         }
 
         write!(f, "{}", out)
-    }
-}
-
-/// Builtin variations
-impl Game {
-    pub fn default(player_one: Box<dyn Player>, player_two: Box<dyn Player>) -> Game {
-        return Game::new(3, vec![player_one, player_two], 3);
-    }
-
-    pub fn default_three_players(
-        player_one: Box<dyn Player>,
-        player_two: Box<dyn Player>,
-        player_three: Box<dyn Player>,
-    ) -> Game {
-        return Game::new(4, vec![player_one, player_two, player_three], 3);
     }
 }
