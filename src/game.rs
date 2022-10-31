@@ -3,13 +3,18 @@ use std::fmt;
 
 use crate::{tictactoe_error::TicTacToeError, utils, GameState, Player};
 
+use colored::Colorize;
+
 pub struct Game {
     pub board: Vec<Vec<Option<usize>>>,
-    board_size: usize,
+    pub board_size: usize,
 
-    required_icons_in_a_row: usize,
+    pub required_icons_in_a_row: usize,
 
     pub players: Vec<Box<dyn Player>>,
+
+    //                     i      j      player
+    pub move_history: Vec<(usize, usize, usize)>,
 }
 
 impl Game {
@@ -51,6 +56,8 @@ impl Game {
             required_icons_in_a_row,
 
             players,
+
+            move_history: vec![],
         })
     }
 
@@ -167,6 +174,7 @@ impl Game {
         };
 
         self.board[i][j] = Some(player_index);
+        self.move_history.push((i, j, player_index));
 
         Ok(())
     }
@@ -208,12 +216,30 @@ impl fmt::Display for Game {
             out.push(' ');
 
             for j in 0..self.board_size {
-                out.push(match self.board[i][j] {
-                    Some(p_index) => self.players[p_index].icon(),
-                    None => ' ',
-                });
+                if self.move_history.len() != 0 {
+                    let mut is_colored = false;
 
-                out.push_str("  ");
+                    if i == self.move_history.last().unwrap().0
+                        && j == self.move_history.last().unwrap().1
+                    {
+                        is_colored = true;
+                    }
+
+                    out.push_str(&match self.board[i][j] {
+                        Some(p_index) => {
+                            if !is_colored {
+                                self.players[p_index].icon().to_string()
+                            } else {
+                                self.players[p_index].icon().to_string().red().to_string()
+                            }
+                        }
+                        None => " ".to_string(),
+                    });
+
+                    out.push_str("  ");
+                } else {
+                    out.push_str("   ");
+                }
             }
             out.push_str("\n");
         }
