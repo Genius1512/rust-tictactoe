@@ -25,9 +25,8 @@ pub fn parse_config() -> Result<Config, Box<dyn Error>> {
                 .help("The amount of required icons in a row to win"),
         )
         .arg(
-            Arg::new("player")
-                .short('p')
-                .long("player")
+            Arg::new("human")
+                .long("hp")
                 .value_parser(value_parser!(char))
                 .action(ArgAction::Append)
                 .help("Add a player to the game. Specify the icon after the argument."),
@@ -36,7 +35,7 @@ pub fn parse_config() -> Result<Config, Box<dyn Error>> {
 
     let mut players: Vec<Box<dyn Player>> = vec![];
 
-    for player in match matches.get_many::<char>("player") {
+    for player in match matches.get_many::<char>("human") {
         Some(player) => player,
         None => return Err(Box::new(TicTacToeError::new("Error while parsing players"))),
     } {
