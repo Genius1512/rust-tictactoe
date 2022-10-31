@@ -10,7 +10,8 @@ fn check_for_winner_diagonal_left_test() {
             Box::new(HumanPlayer::new('o')),
         ],
         3,
-    );
+    )
+    .unwrap();
 
     game.make_moves(vec![(0, 0, 0)]).unwrap();
 
@@ -37,7 +38,8 @@ fn check_for_winner_diagonal_right_test() {
             Box::new(HumanPlayer::new('o')),
         ],
         3,
-    );
+    )
+    .unwrap();
 
     game.make_moves(vec![(0, 0, 0), (1, 1, 0), (2, 2, 0)])
         .unwrap();
@@ -57,7 +59,8 @@ fn check_for_winner_horizontal_test() {
             Box::new(HumanPlayer::new('o')),
         ],
         3,
-    );
+    )
+    .unwrap();
 
     game.make_moves(vec![(0, 0, 0), (0, 1, 0), (0, 2, 0)])
         .unwrap();
@@ -77,7 +80,8 @@ fn check_for_winner_vertical_test() {
             Box::new(HumanPlayer::new('o')),
         ],
         3,
-    );
+    )
+    .unwrap();
 
     game.make_moves(vec![(0, 0, 0), (1, 0, 0), (2, 0, 0)])
         .unwrap();
@@ -97,7 +101,8 @@ fn check_for_winner_tie_test() {
             Box::new(HumanPlayer::new('o')),
         ],
         3,
-    );
+    )
+    .unwrap();
 
     game.make_moves(vec![
         (0, 0, 0),
