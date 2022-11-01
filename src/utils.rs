@@ -1,6 +1,6 @@
-use std::error::Error;
+use std::error;
 
-use crate::tictactoe_error::TicTacToeError;
+use crate::error::Error;
 
 pub fn digit_to_char(digit: usize) -> char {
     match digit {
@@ -35,7 +35,7 @@ pub fn digit_to_char(digit: usize) -> char {
     }
 }
 
-pub fn char_to_digit(c: char) -> Result<usize, Box<dyn Error>> {
+pub fn char_to_digit(c: char) -> Result<usize, Box<dyn error::Error>> {
     Ok(match c {
         'a' => 1,
         'b' => 2,
@@ -64,11 +64,6 @@ pub fn char_to_digit(c: char) -> Result<usize, Box<dyn Error>> {
         'y' => 25,
         'z' => 26,
 
-        _ => {
-            return Err(Box::new(TicTacToeError::new(&format!(
-                "Got invalud char {}",
-                c
-            ))))
-        }
+        _ => return Err(Box::new(Error::new(&format!("Got invalud char {}", c)))),
     })
 }

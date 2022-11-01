@@ -9,7 +9,7 @@ pub use game_state::GameState;
 mod player;
 pub use player::Player;
 
-mod tictactoe_error;
-pub use tictactoe_error::TicTacToeError;
+mod error;
+pub use error::Error;
 
 pub mod utils;

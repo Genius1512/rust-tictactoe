@@ -1,7 +1,7 @@
-use std::error::Error;
+use std::error;
 use std::fmt;
 
-use crate::{tictactoe_error::TicTacToeError, utils, GameState, Player};
+use crate::{error::Error, utils, GameState, Player};
 
 use colored::Colorize;
 
@@ -22,21 +22,19 @@ impl Game {
         size: usize,
         players: Vec<Box<dyn Player>>,
         required_icons_in_a_row: usize,
-    ) -> Result<Game, Box<dyn Error>> {
+    ) -> Result<Game, Box<dyn error::Error>> {
         if size > 26 {
-            return Err(Box::new(TicTacToeError::new(
-                "Board is too big, maximum is 26",
-            )));
+            return Err(Box::new(Error::new("Board is too big, maximum is 26")));
         }
 
         if required_icons_in_a_row > size {
-            return Err(Box::new(TicTacToeError::new(
+            return Err(Box::new(Error::new(
                 "This configuration is not allowed, as the required icons in a row must be below or equal to the board's size"
             )));
         }
 
         if players.len() < 2 {
-            return Err(Box::new(TicTacToeError::new(
+            return Err(Box::new(Error::new(
                 "Not enough players, at least two are required",
             )));
         }
@@ -167,10 +165,10 @@ impl Game {
         };
     }
 
-    pub fn make_move(&mut self, player_index: usize) -> Result<(), Box<dyn Error>> {
+    pub fn make_move(&mut self, player_index: usize) -> Result<(), Box<dyn error::Error>> {
         let (i, j) = match self.players.get(player_index) {
             Some(p) => p.get_move(&self),
-            None => return Err(Box::new(TicTacToeError::new("Player index out of range"))),
+            None => return Err(Box::new(Error::new("Player index out of range"))),
         };
 
         self.board[i][j] = Some(player_index);
@@ -179,7 +177,10 @@ impl Game {
         Ok(())
     }
 
-    pub fn make_moves(&mut self, moves: Vec<(usize, usize, usize)>) -> Result<(), Box<dyn Error>> {
+    pub fn make_moves(
+        &mut self,
+        moves: Vec<(usize, usize, usize)>,
+    ) -> Result<(), Box<dyn error::Error>> {
         for move_ in moves {
             self.board[move_.0][move_.1] = Some(move_.2);
         }

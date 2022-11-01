@@ -1,9 +1,9 @@
-use std::error::Error;
+use std::error;
 
 use clap::{value_parser, Arg, ArgAction, Command};
-use tictactoe::{builtin::HumanPlayer, Player, TicTacToeError};
+use tictactoe::{builtin::HumanPlayer, Error, Player};
 
-pub fn parse_config() -> Result<Config, Box<dyn Error>> {
+pub fn parse_config() -> Result<Config, Box<dyn error::Error>> {
     let matches = Command::new("TicTacToe")
         .version("0.1.0")
         .author("Silvan Schmidt")
@@ -37,7 +37,7 @@ pub fn parse_config() -> Result<Config, Box<dyn Error>> {
 
     for player in match matches.get_many::<char>("human") {
         Some(player) => player,
-        None => return Err(Box::new(TicTacToeError::new("Error while parsing players"))),
+        None => return Err(Box::new(Error::new("Error while parsing players"))),
     } {
         players.push(Box::new(HumanPlayer::new(*player)))
     }
@@ -45,15 +45,11 @@ pub fn parse_config() -> Result<Config, Box<dyn Error>> {
     Ok(Config {
         board_size: match matches.get_one("size") {
             Some(size) => *size,
-            None => return Err(Box::new(TicTacToeError::new("Error while parsing size"))),
+            None => return Err(Box::new(Error::new("Error while parsing size"))),
         },
         required_icons_in_a_row: match matches.get_one("win_condition") {
             Some(i) => *i,
-            None => {
-                return Err(Box::new(TicTacToeError::new(
-                    "Error while parsing win_condition",
-                )))
-            }
+            None => return Err(Box::new(Error::new("Error while parsing win_condition"))),
         },
         players,
     })
