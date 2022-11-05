@@ -19,7 +19,25 @@ impl Game {
         win_condition: usize,
         players: Vec<Box<dyn Player>>,
     ) -> Result<Game, Box<dyn error::Error>> {
-        // TODO: add checks
+        if players.len() < 2 {
+            return Err(Box::new(Error::new("At least 2 players are required")));
+        }
+
+        if win_condition > size {
+            return Err(Box::new(Error::new("Win condition is impossible to meet")));
+        }
+
+        let mut taken_icons: Vec<char> = vec![];
+        for player in &players {
+            if taken_icons.contains(&player.icon()) {
+                return Err(Box::new(Error::new(&format!(
+                    "The icon '{}' is used multiple times",
+                    player.icon()
+                ))));
+            } else {
+                taken_icons.push(player.icon());
+            }
+        }
 
         Ok(Game {
             board: Board::new(size)?,
