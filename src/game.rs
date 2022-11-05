@@ -2,7 +2,7 @@ use std::{error, fmt};
 
 use colored::Colorize;
 
-use crate::{utils, Board, Player};
+use crate::{utils, Board, Error, Player, PlayerIndex};
 
 pub struct Game {
     pub board: Board,
@@ -29,6 +29,22 @@ impl Game {
 
             win_condition,
         })
+    }
+
+    pub fn make_move(&mut self, player_index: PlayerIndex) -> Result<(), Box<dyn error::Error>> {
+        let move_ = match self.players.get(player_index) {
+            Some(player) => player.get_move(self),
+            None => {
+                return Err(Box::new(Error::new(&format!(
+                    "Player with index {} does not exist",
+                    player_index
+                ))))
+            }
+        };
+
+        self.board.make_move(move_, player_index)?;
+
+        Ok(())
     }
 }
 

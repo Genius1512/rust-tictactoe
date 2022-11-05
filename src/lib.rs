@@ -13,4 +13,6 @@ pub use move_::Move;
 mod player;
 pub use player::{Player, PlayerIndex};
 
+pub mod players;
+
 pub mod utils;

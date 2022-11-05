@@ -33,7 +33,11 @@ impl Board {
         })
     }
 
-    pub fn make_move(&mut self, move_: Move) -> Result<(), Box<dyn error::Error>> {
+    pub fn make_move(
+        &mut self,
+        move_: Move,
+        player_index: PlayerIndex,
+    ) -> Result<(), Box<dyn error::Error>> {
         if move_.x >= self.size || move_.y >= self.size {
             return Err(Box::new(Error::new(&format!(
                 "Could not make move, an index is out of range. x={}, y={}, size={}",
@@ -41,7 +45,7 @@ impl Board {
             ))));
         }
 
-        self.board[move_.x][move_.y] = Some(move_.player_index);
+        self.board[move_.x][move_.y] = Some(player_index);
         self.move_history.push(move_);
 
         Ok(())
