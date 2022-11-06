@@ -49,7 +49,10 @@ impl Game {
         })
     }
 
-    pub fn make_move(&mut self, player_index: PlayerIndex) -> Result<(), Box<dyn error::Error>> {
+    pub fn let_player_make_move(
+        &mut self,
+        player_index: PlayerIndex,
+    ) -> Result<(), Box<dyn error::Error>> {
         let move_ = match self.players.get(player_index) {
             Some(player) => player.get_move(self),
             None => {

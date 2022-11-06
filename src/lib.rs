@@ -7,6 +7,9 @@ pub use error::Error;
 mod game;
 pub use game::Game;
 
+mod game_state;
+pub use game_state::GameState;
+
 mod move_;
 pub use move_::Move;
 

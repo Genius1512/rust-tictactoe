@@ -1,6 +1,6 @@
 use std::{error, ops::Deref};
 
-use crate::{Error, Move, PlayerIndex};
+use crate::{Error, GameState, Move, PlayerIndex};
 
 pub type BoardType = Vec<Vec<Option<PlayerIndex>>>;
 
@@ -49,6 +49,21 @@ impl Board {
         self.move_history.push(move_);
 
         Ok(())
+    }
+
+    pub fn make_moves(
+        &mut self,
+        moves: Vec<(Move, PlayerIndex)>,
+    ) -> Result<(), Box<dyn error::Error>> {
+        for move_ in moves {
+            self.make_move(move_.0, move_.1)?;
+        }
+
+        Ok(())
+    }
+
+    pub fn check_for_winner(&self) -> GameState {
+        todo!()
     }
 }
 

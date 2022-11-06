@@ -1,4 +1,4 @@
-use tictactoe::{players::RandomPlayer, Game};
+use tictactoe::{players::RandomPlayer, Game, Move};
 
 fn main() {
     let mut game = Game::new(
@@ -11,8 +11,9 @@ fn main() {
     )
     .unwrap();
 
-    game.make_move(0).unwrap();
-    game.make_move(1).unwrap();
+    game.board
+        .make_moves(vec![(Move { x: 0, y: 0 }, 0), (Move { x: 1, y: 1 }, 1)])
+        .unwrap();
 
     println!("{}", game);
 }
